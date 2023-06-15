@@ -11,6 +11,16 @@ body,
   padding: 0;
 }
 
+html {
+  @apply bg-gray-900;
+}
+
+#app {
+  @apply h-full;
+}
+
+
 img {
   @apply mx-auto rounded-lg my-2;
 }
+

@@ -5,6 +5,12 @@
 </template>
 
 <script setup lang="ts">
+useHeadSafe({
+  title: () => {
+    return 'Anime Dub Status'
+  }
+})
+
 useServerSeoMeta({
   title: 'Anime Dub Status',
   ogTitle: 'Anime Dub Status',

@@ -7,8 +7,5 @@ export default defineNuxtConfig({
   ],
   app: {
     rootId: 'app'
-  },
-  nitro: {
-    preset: 'aws-lambda'
   }
 })

@@ -25,9 +25,15 @@ interface IError {
     message: string
 }
 
-defineProps<{
+const props = defineProps<{
     error: IError
 }>()
 
 const handleError = () => clearError({ redirect: '/' })
+
+useHeadSafe({
+  title: () => {
+    return 'Anime Dub Status - ' + props.error.statusCode
+  }
+})
 </script>
