@@ -1,7 +1,7 @@
 <template>
-  <footer class="flex flex-col justify-center items-center bg-gray-800 text-gray-300 py-10">
+  <footer class="flex flex-col justify-center items-center bg-gray-800 text-gray-300 py-6">
     <div class="flex flex-col justify-center items-center gap-y-2">
-      <p>
+      <p class="text-sm">
         &copy; 2025 Dakota Pierone (Grim3212). Built using
         <a
           class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
@@ -13,8 +13,25 @@
           href="https://nuxt.com/"
         >Nuxt 3</a>.
       </p>
-      <p>
-        Utilizes AGPL-3.0 licensed code from
+      <p class="text-xs">
+        Licensed under <a
+          class="underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://www.gnu.org/licenses/agpl-3.0.html"
+        >AGPL-3.0</a>. Source code can be found at the following links:
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://github.com/grim3212/AnimeDubStatus"
+        >Website</a> |
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://github.com/grim3212/AnimeDubStatus-Infra"
+        >Infrastructure</a>
+      </p>
+      <p class="text-xs">
+        Uses <a
+          class="underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://www.gnu.org/licenses/agpl-3.0.html"
+        >AGPL-3.0</a> licensed code from
         <a
           class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
           href="https://github.com/MAL-Dubs/MAL-Dubs"
@@ -24,8 +41,8 @@
           href="https://github.com/MAL-Dubs/MAL-Dubs/blob/main/data/dubInfo.json"
         >here</a>.
       </p>
-      <p>
-        We use the list of
+      <p class="text-xs">
+        Uses the list of
         <a
           class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
           href="https://myanimelist.net/forum/?topicid=1692966"
