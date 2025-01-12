@@ -1,6 +1,5 @@
 <template>
   <section class="text-gray-200">
-    <CreditsPopup class="absolute top-0 right-0 m-2" />
     <div class="mx-auto px-5 py-24 flex flex-col w-full justify-center items-center">
       <div class="max-w-6xl flex flex-wrap w-full mb-20 flex-col items-center text-center">
         <h1
@@ -211,14 +210,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import {
-  SearchState,
-  DubMatch,
-  DubInfo,
   CurrentlyAiringList,
   DubCurrentlyAiring,
+  DubInfo,
+  DubMatch,
   FullAnime,
+  SearchState,
 } from '@/types'
 
 const { $api } = useNuxtApp()

@@ -1,11 +1,42 @@
 <template>
-  <footer class="flex flex-col justify-center items-center bg-gray-800 text-gray-300 py-2">
-    <div>
-      &copy; 2023 Dakota Pierone (Grim3212). Built using
-      <a
-        class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
-        href="https://v3.vuejs.org/"
-      >Vue</a>.
+  <footer class="flex flex-col justify-center items-center bg-gray-800 text-gray-300 py-10">
+    <div class="flex flex-col justify-center items-center gap-y-2">
+      <p>
+        &copy; 2025 Dakota Pierone (Grim3212). Built using
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://v3.vuejs.org/"
+        >Vue</a>
+        with
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://nuxt.com/"
+        >Nuxt 3</a>.
+      </p>
+      <p>
+        Utilizes AGPL-3.0 licensed code from
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://github.com/MAL-Dubs/MAL-Dubs"
+        >MAL-Dubs</a>. <b>dubInfo.json</b> can be found
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://github.com/MAL-Dubs/MAL-Dubs/blob/main/data/dubInfo.json"
+        >here</a>.
+      </p>
+      <p>
+        We use the list of
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://myanimelist.net/forum/?topicid=1692966"
+        >Currently Airing Anime</a>
+        maintained by
+        <a
+          class="font-bold underline text-gray-500 hover:text-black visited:text-purple-600"
+          href="https://myanimelist.net/profile/Kenny_Stryker"
+        >Kenny_Stryker</a>
+        on MyAnimeList.
+      </p>
     </div>
     <div class="grid grid-cols-2 gap-4">
       <a
@@ -23,7 +54,8 @@
         <title>Twitter</title>
         <path
           d="M6.29 18.25c7.55 0 11.67-6.25 11.67-11.67v-.53c.8-.59 1.49-1.3 2.04-2.13-.75.33-1.54.55-2.36.65a4.12 4.12 0 0 0 1.8-2.27c-.8.48-1.68.81-2.6 1a4.1 4.1 0 0 0-7 3.74 11.65 11.65 0 0 1-8.45-4.3 4.1 4.1 0 0 0 1.27 5.49C2.01 8.2 1.37 8.03.8 7.7v.05a4.1 4.1 0 0 0 3.3 4.03 4.1 4.1 0 0 1-1.86.07 4.1 4.1 0 0 0 3.83 2.85A8.23 8.23 0 0 1 0 16.4a11.62 11.62 0 0 0 6.29 1.84"
-        /></svg><span class="ml-2">Twitter</span></a>
+        /></svg><span class="ml-2">Twitter</span>
+      </a>
     </div>
   </footer>
 </template>

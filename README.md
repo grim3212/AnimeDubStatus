@@ -1,63 +1,52 @@
-# Nuxt 3 Minimal Starter
+# Anime Dub Status
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A website for determining if an Anime has a dub available. https://animedubstatus.com/
 
-## Setup
+Backend source can be found at https://github.com/grim3212/AnimeDubStatus-Infra
+
+### Credits
+
+The backend infrastructure for this utilizes a few sources that make the website possible.
+
+- We utilize the `AGPL-3.0` licensed [dubInfo.json](https://github.com/MAL-Dubs/MAL-Dubs/blob/main/data/dubInfo.json) from [MAL-Dubs](https://github.com/MAL-Dubs/MAL-Dubs).
+- We use the [currently airing anime](https://myanimelist.net/forum/?topicid=1692966) from MyAnimeList that [Kenny_Stryker](https://myanimelist.net/profile/Kenny_Stryker) maintains.
+- The MyAnimeList API used extensively through the Python package [mal-api](https://pypi.org/project/mal-api/)
+
+
+### Development
+
+Built using [Nuxt 3](https://nuxt.com/docs/getting-started/introduction).
+
+#### Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
 yarn install
 ```
 
-## Development Server
+### Linting
+
+Linting in the editor isn't showing warnings or working 100% right in VSCode currently but I don't have enough time to diagnose.
+
+```bash
+yarn lint
+```
+
+### Development Server
 
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
 yarn dev
 ```
 
-## Production
+### Production
 
 Build the application for production:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
 yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
