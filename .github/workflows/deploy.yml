@@ -1,0 +1,90 @@
+name: Deploy
+
+# Pushes to main deploy automatically: "full" when the infrastructure, data job, deploy script
+# or dependencies changed, otherwise "web" (just upload the site). Run it by hand from the
+# Actions tab to pick either one.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+    inputs:
+      target:
+        description: What to deploy
+        type: choice
+        options:
+          - web
+          - full
+          - refresh-data
+        default: web
+
+permissions:
+  id-token: write # sign in to AWS with OIDC (no stored AWS keys)
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # to diff against the previous push
+          persist-credentials: false
+
+      - name: Pick full or web deploy
+        id: target
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT: ${{ inputs.target }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = workflow_dispatch ]; then
+            target="$INPUT"
+          elif [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            target=full # first push, or history we can't diff
+          elif git diff --name-only "$BEFORE" "$GITHUB_SHA" \
+            | grep -qE '^infra/|^jobs/|^shared/|^scripts/deploy\.mjs$|^cdk\.json$|^package(-lock)?\.json$|^\.github/'; then
+            target=full
+          else
+            target=web
+          fi
+          echo "target=$target" >> "$GITHUB_OUTPUT"
+          echo "### Deploying: $target" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - run: npm test
+
+      - name: Write infra config
+        env:
+          INFRA_CONFIG_JSON: ${{ secrets.INFRA_CONFIG_JSON }}
+        run: |
+          if [ -z "$INFRA_CONFIG_JSON" ]; then
+            echo "::error::Add the INFRA_CONFIG_JSON repository secret (contents of infra/config.json)."
+            exit 1
+          fi
+          printf '%s' "$INFRA_CONFIG_JSON" > infra/config.json
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - run: npm run build
+
+      - run: node scripts/deploy.mjs "$TARGET"
+        env:
+          TARGET: ${{ steps.target.outputs.target }}

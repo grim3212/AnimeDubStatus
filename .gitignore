@@ -1,26 +1,32 @@
-# Nuxt dev/build outputs
-.output
-.nuxt
-.nitro
-.cache
-dist
+# Dependencies
+node_modules/
 
-# Node dependencies
-node_modules
+# Nuxt build output
+.nuxt/
+.output/
+.data/
+.nitro/
+.cache/
+dist/
 
-# Logs
-logs
-*.log
+# CDK
+cdk.out/
+infra/config.json
 
-# Misc
-.DS_Store
-.fleet
-.idea
+# Data written by `npm run refresh-data` (in production the Lambda writes it to S3)
+public/data/
 
-# Local env files
+# Local env and logs
 .env
 .env.*
 !.env.example
+*.log
 
-# Generated jsons
-public/*.json
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.fleet/
+
+# Local-only AWS account setup (not part of the public repo)
+scripts/setup-aws-access.sh
