@@ -22,7 +22,12 @@
       <!-- Rows a show doesn't have stay as blank space so every card is the same height. -->
       <div class="mt-auto space-y-1">
         <p class="truncate text-xs text-gray-300">
-          {{ dubProgress(show) ? `Dub ${dubProgress(show)}` : ' ' }}
+          <template v-if="dubProgress(show)">
+            Dub {{ dubProgress(show) }}
+          </template>
+          <template v-else>
+            &nbsp;
+          </template>
         </p>
         <div
           class="h-1 overflow-hidden rounded-full bg-gray-700"
