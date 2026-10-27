@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-slate-800"
+    class="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-700"
     :style="color ? { backgroundColor: `${color}33` } : undefined"
   >
     <img
@@ -17,7 +17,7 @@
     >
     <div
       v-else
-      class="flex h-full w-full items-center justify-center p-3 text-center text-sm font-semibold text-slate-400"
+      class="flex h-full w-full items-center justify-center p-3 text-center text-sm font-semibold text-gray-400"
       aria-hidden="true"
     >
       {{ title }}

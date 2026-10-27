@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       title: 'Anime Dub Status',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'theme-color', content: '#020617' },
+        { name: 'theme-color', content: '#111827' },
         {
           name: 'description',
           content: 'Find out if an anime has an English dub, and see which dubs are airing this week.',

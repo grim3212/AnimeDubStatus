@@ -2,12 +2,13 @@ import type { AiringDub, MediaSummary } from '#shared/types'
 
 export type DubStatus = 'airing' | 'dubbed' | 'partial' | 'none' | 'unknown'
 
+/** `answer` and `text` are the colored answer in the search result and detail view; `badge` colors the small pills. */
 export const DUB_STATUS: Record<DubStatus, { label: string, answer: string, badge: string, text: string }> = {
   airing: {
     label: 'Dub airing',
     answer: 'Yes, the dub is airing now',
-    badge: 'bg-sky-500/15 text-sky-300 ring-sky-400/40',
-    text: 'text-sky-300',
+    badge: 'bg-blue-500/15 text-blue-300 ring-blue-400/40',
+    text: 'text-blue-300',
   },
   dubbed: {
     label: 'Dubbed',
@@ -16,22 +17,22 @@ export const DUB_STATUS: Record<DubStatus, { label: string, answer: string, badg
     text: 'text-emerald-300',
   },
   partial: {
-    label: 'Partly dubbed',
+    label: 'Incomplete',
     answer: 'Partly. Not every episode is dubbed',
     badge: 'bg-amber-500/15 text-amber-300 ring-amber-400/40',
     text: 'text-amber-300',
   },
   none: {
-    label: 'No dub',
+    label: 'Not dubbed',
     answer: 'No English dub yet',
-    badge: 'bg-rose-500/15 text-rose-300 ring-rose-400/40',
-    text: 'text-rose-300',
+    badge: 'bg-red-500/15 text-red-300 ring-red-400/40',
+    text: 'text-red-300',
   },
   unknown: {
     label: 'Unknown',
     answer: 'Unknown: this entry isn\'t on MyAnimeList',
-    badge: 'bg-slate-500/15 text-slate-300 ring-slate-400/40',
-    text: 'text-slate-300',
+    badge: 'bg-gray-500/15 text-gray-300 ring-gray-400/40',
+    text: 'text-gray-300',
   },
 }
 

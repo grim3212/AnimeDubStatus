@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt generate",
-    "preview": "nuxt preview",
+    "preview": "node scripts/preview.mjs",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck && tsc --noEmit -p infra && tsc --noEmit -p jobs",

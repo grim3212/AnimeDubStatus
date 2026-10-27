@@ -1,15 +1,15 @@
 <template>
   <div class="mx-auto w-full max-w-6xl px-4 pt-10 sm:pt-16">
     <header class="mx-auto max-w-2xl text-center">
-      <h1 class="text-4xl font-extrabold tracking-tight text-slate-50 sm:text-6xl">
-        <NuxtLink to="/" class="hover:text-sky-200">
+      <h1 class="text-4xl font-extrabold tracking-tight text-gray-200 sm:text-5xl md:text-6xl">
+        <NuxtLink to="/" class="hover:text-white">
           Anime Dub Status
         </NuxtLink>
       </h1>
-      <p class="mt-3 text-slate-300 sm:text-lg">
-        Is it dubbed? Search any anime to find out.
-        <span v-if="dubInfo" class="block text-sm text-sky-300 sm:inline">
-          Tracking {{ dubInfo.dubbed.length.toLocaleString() }} English dubs.
+      <p class="mt-3 leading-relaxed text-gray-200">
+        Find out if an anime has been dubbed or not.
+        <span v-if="dubInfo" class="text-blue-300">
+          Currently <span class="font-semibold underline">{{ dubInfo.dubbed.length.toLocaleString() }}</span> dubs
         </span>
       </p>
       <div class="mt-6">
@@ -17,7 +17,7 @@
       </div>
     </header>
 
-    <p v-if="dataError" class="mx-auto mt-6 max-w-2xl rounded-lg bg-rose-500/10 px-4 py-3 text-center text-rose-200 ring-1 ring-rose-400/30">
+    <p v-if="dataError" class="mx-auto mt-6 max-w-2xl rounded-lg bg-red-500/10 px-4 py-3 text-center text-red-200 ring-1 ring-red-400/30">
       {{ dataError }}
     </p>
 
@@ -34,9 +34,9 @@
     <div class="mt-14 space-y-14">
       <AiringSchedule v-if="airing" :airing="airing" @select="selectAiring" />
       <div v-else-if="!dataError" class="space-y-3" aria-hidden="true">
-        <div class="h-8 w-64 animate-pulse rounded bg-slate-800" />
+        <div class="h-8 w-64 animate-pulse rounded bg-gray-700" />
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          <div v-for="n in 5" :key="n" class="aspect-[2/3] animate-pulse rounded-xl bg-slate-900" />
+          <div v-for="n in 5" :key="n" class="aspect-[2/3] animate-pulse rounded-xl bg-gray-800" />
         </div>
       </div>
       <UpcomingDubs v-if="airing?.upcoming.length" :groups="airing.upcoming" />

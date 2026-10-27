@@ -2,7 +2,7 @@
   <form role="search" class="relative w-full" @submit.prevent="emit('search', text)">
     <label for="search" class="sr-only">Search for an anime</label>
     <svg
-      class="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-400"
+      class="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-gray-400"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -19,13 +19,13 @@
       enterkeyhint="search"
       autocomplete="off"
       maxlength="100"
-      placeholder="Search anime, e.g. Frieren"
-      class="w-full rounded-xl border border-slate-700 bg-slate-900 py-3.5 pr-28 pl-12 text-base text-slate-100 placeholder:text-slate-500 focus:border-sky-400 focus:ring-2 focus:ring-sky-400/40 focus:outline-none"
+      placeholder="Cowboy Bebop..."
+      class="w-full rounded-xl border border-gray-600 bg-gray-800 py-3.5 pr-28 pl-12 text-base text-gray-100 placeholder:text-gray-500 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40 focus:outline-none"
     >
     <button
       type="submit"
       :disabled="loading || !text.trim()"
-      class="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:outline-none disabled:opacity-60"
+      class="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:outline-none disabled:opacity-60"
     >
       {{ loading ? 'Searching…' : 'Search' }}
     </button>

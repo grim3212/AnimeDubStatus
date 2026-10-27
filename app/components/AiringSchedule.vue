@@ -1,110 +1,109 @@
 <template>
   <section aria-labelledby="schedule-heading">
-    <div class="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-      <h2 id="schedule-heading" class="text-2xl font-extrabold text-slate-100 sm:text-3xl">
-        Dubs airing this week
-      </h2>
-      <p class="text-xs text-slate-400">
-        <template v-if="airing.listUpdated">
-          List updated {{ airing.listUpdated }} ·
-        </template>
-        Checked {{ checkedAgo }}
-      </p>
-    </div>
-
-    <!-- Weekday tabs: scroll sideways on phones. -->
-    <div
-      role="tablist"
-      aria-label="Day of the week"
-      class="no-scrollbar -mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0"
-      @keydown="onTabKey"
-    >
-      <button
-        v-for="day in WEEKDAYS"
-        :id="`tab-${day}`"
-        :key="day"
-        ref="tabs"
-        role="tab"
-        type="button"
-        :aria-selected="day === selectedDay"
-        :aria-controls="`panel-${day}`"
-        :tabindex="day === selectedDay ? 0 : -1"
-        class="flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold ring-1 transition-colors focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:outline-none"
-        :class="day === selectedDay
-          ? 'bg-sky-500 text-slate-950 ring-sky-400'
-          : 'bg-slate-900 text-slate-300 ring-slate-700 hover:bg-slate-800'"
-        @click="selectedDay = day"
+    <div class="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+      <div>
+        <h2 id="schedule-heading" class="text-2xl font-extrabold text-gray-100 sm:text-3xl">
+          Dubs airing this week
+        </h2>
+        <p class="mt-1 text-xs text-gray-400">
+          <template v-if="airing.listUpdated">
+            List updated {{ airing.listUpdated }} ·
+          </template>
+          Checked {{ checkedAgo }}
+        </p>
+      </div>
+      <!-- Large screens can show the whole week at once. -->
+      <div
+        class="hidden rounded-lg bg-gray-800 p-1 ring-1 ring-gray-700 lg:inline-flex"
+        role="group"
+        aria-label="Schedule layout"
       >
-        <span class="sm:hidden">{{ day.slice(0, 3) }}</span>
-        <span class="hidden sm:inline">{{ day }}</span>
-        <span v-if="day === today" class="text-[0.65rem] tracking-wide uppercase opacity-80">today</span>
-        <span
-          class="rounded-full px-1.5 text-xs"
-          :class="day === selectedDay ? 'bg-slate-950/20' : 'bg-slate-800 text-slate-400'"
-        >{{ airing.days[day].length }}</span>
-      </button>
+        <button
+          v-for="option in (['day', 'week'] as const)"
+          :key="option"
+          type="button"
+          :aria-pressed="view === option"
+          class="rounded-md px-3 py-1 text-sm font-semibold capitalize focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:outline-none"
+          :class="view === option ? 'bg-blue-600 text-white' : 'text-gray-300 hover:text-white'"
+          @click="setView(option)"
+        >
+          {{ option === 'day' ? 'One day' : 'Whole week' }}
+        </button>
+      </div>
     </div>
 
-    <div
-      :id="`panel-${selectedDay}`"
-      role="tabpanel"
-      :aria-labelledby="`tab-${selectedDay}`"
-    >
-      <p v-if="!shows.length" class="rounded-xl bg-slate-900 px-4 py-8 text-center text-slate-400">
-        No dubs airing on {{ selectedDay }}.
-      </p>
-      <ul v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
-        <li v-for="show in shows" :key="show.malId" class="min-w-0">
-          <button
-            type="button"
-            class="group flex h-full w-full flex-col overflow-hidden rounded-xl bg-slate-900 text-left ring-1 ring-slate-800 transition hover:ring-sky-500/60 focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:outline-none"
-            @click="emit('select', show)"
-          >
-            <div class="relative">
-              <AnimeCover
-                :src="show.media?.cover"
-                :title="show.title"
-                :color="show.media?.color"
-              />
-              <span
-                v-if="show.suspended"
-                class="absolute top-2 left-2 rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[0.7rem] font-bold text-white"
-              >Dub paused</span>
-            </div>
-            <div class="flex flex-1 flex-col gap-1.5 p-2.5">
-              <p class="line-clamp-2 text-sm leading-snug font-semibold break-words text-slate-100" :title="show.title">
-                {{ show.title }}
-              </p>
-              <div class="mt-auto space-y-1">
-                <div v-if="dubProgress(show)" class="flex items-center justify-between text-xs text-slate-300">
-                  <span>Dub {{ dubProgress(show) }}</span>
-                </div>
-                <div
-                  v-if="show.dubbedEpisodes && show.totalEpisodes"
-                  class="h-1 overflow-hidden rounded-full bg-slate-800"
-                  aria-hidden="true"
-                >
-                  <div
-                    class="h-full rounded-full bg-sky-400"
-                    :style="{ width: `${Math.min(100, (show.dubbedEpisodes / show.totalEpisodes) * 100)}%` }"
-                  />
-                </div>
-                <p v-if="show.media?.nextAiringEpisode" class="text-[0.7rem] text-slate-400">
-                  JP ep {{ show.media.nextAiringEpisode.episode }}:
-                  {{ formatAiringTime(show.media.nextAiringEpisode.airingAt) }}
-                </p>
-              </div>
-            </div>
-          </button>
-        </li>
-      </ul>
+    <!-- Whole week: one column per day (large screens only). -->
+    <div v-if="showWeek" class="grid grid-cols-7 gap-3">
+      <div v-for="day in WEEKDAYS" :key="day" class="min-w-0">
+        <h3
+          class="mb-2 flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-base font-bold"
+          :class="day === today ? 'bg-gray-800 text-orange-400 ring-1 ring-orange-400/50' : 'bg-gray-800 text-gray-200'"
+        >
+          {{ day }}
+          <span class="text-xs font-semibold opacity-70">{{ airing.days[day].length }}</span>
+        </h3>
+        <ul class="space-y-3">
+          <li v-for="show in airing.days[day]" :key="show.malId">
+            <AiringCard :show="show" compact @select="emit('select', $event)" />
+          </li>
+          <li v-if="!airing.days[day].length" class="py-4 text-center text-yellow-400">
+            Nothing 😢
+          </li>
+        </ul>
+      </div>
     </div>
+
+    <template v-else>
+      <!-- Weekday tabs: centered, and scroll sideways on phones (safe-center keeps the first tab reachable). -->
+      <div
+        ref="tablist"
+        role="tablist"
+        aria-label="Day of the week"
+        class="no-scrollbar -mx-4 mb-3 flex justify-center-safe gap-2 overflow-x-auto px-4 py-1.5 sm:mx-0 sm:px-1.5"
+        @keydown="onTabKey"
+      >
+        <button
+          v-for="day in WEEKDAYS"
+          :id="`tab-${day}`"
+          :key="day"
+          ref="tabs"
+          role="tab"
+          type="button"
+          :aria-selected="day === selectedDay"
+          :aria-controls="`panel-${day}`"
+          :tabindex="day === selectedDay ? 0 : -1"
+          class="flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold ring-1 transition-colors focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:outline-none"
+          :class="day === selectedDay
+            ? 'bg-blue-600 text-white ring-blue-500'
+            : 'bg-gray-800 text-gray-300 ring-gray-600 hover:bg-gray-700'"
+          @click="selectDay(day)"
+        >
+          <span class="sm:hidden">{{ day.slice(0, 3) }}</span>
+          <span class="hidden sm:inline">{{ day }}</span>
+          <span v-if="day === today" class="text-[0.65rem] tracking-wide uppercase" :class="day === selectedDay ? 'opacity-80' : 'text-orange-400'">today</span>
+          <span
+            class="rounded-full px-1.5 text-xs"
+            :class="day === selectedDay ? 'bg-white/20' : 'bg-gray-700 text-gray-400'"
+          >{{ airing.days[day].length }}</span>
+        </button>
+      </div>
+
+      <div :id="`panel-${selectedDay}`" role="tabpanel" :aria-labelledby="`tab-${selectedDay}`">
+        <p v-if="!shows.length" class="rounded-xl bg-gray-800 px-4 py-8 text-center text-yellow-400">
+          Nothing 😢
+        </p>
+        <ul v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
+          <li v-for="show in shows" :key="show.malId" class="min-w-0">
+            <AiringCard :show="show" @select="emit('select', $event)" />
+          </li>
+        </ul>
+      </div>
+    </template>
   </section>
 </template>
 
 <script setup lang="ts">
 import { WEEKDAYS, type AiringData, type AiringDub, type Weekday } from '#shared/types'
-import { dubProgress, formatAiringTime } from '~/utils/dub'
 
 const props = defineProps<{ airing: AiringData }>()
 const emit = defineEmits<{ select: [show: AiringDub] }>()
@@ -119,14 +118,61 @@ const checkedAgo = computed(() => {
   return hours < 1 ? 'just now' : hours < 48 ? `${hours}h ago` : `${Math.round(hours / 24)} days ago`
 })
 
-// Arrow keys move between tabs, as screen reader users expect from a tablist.
+// Layout: "week" (default on large screens) or "day". The choice is remembered per browser.
+const VIEW_KEY = 'schedule-view'
+const view = ref<'day' | 'week'>('week')
+const isLarge = ref(false)
+const showWeek = computed(() => isLarge.value && view.value === 'week')
+
+function setView(next: 'day' | 'week') {
+  view.value = next
+  try {
+    localStorage.setItem(VIEW_KEY, next)
+  }
+  catch {
+    // Storage can be unavailable (private browsing); the choice just isn't remembered.
+  }
+}
+
+const tablist = useTemplateRef<HTMLElement>('tablist')
 const tabs = useTemplateRef<HTMLButtonElement[]>('tabs')
+
+// Keep the selected tab visible when the tabs scroll sideways on phones.
+function scrollTabIntoView(index: number, behavior: ScrollBehavior = 'smooth') {
+  const list = tablist.value
+  const tab = tabs.value?.[index]
+  if (!list || !tab || list.scrollWidth <= list.clientWidth) return
+  list.scrollTo({ left: tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2, behavior })
+}
+
+function selectDay(day: Weekday) {
+  selectedDay.value = day
+  scrollTabIntoView(WEEKDAYS.indexOf(day))
+}
+
+// Arrow keys move between tabs, as screen reader users expect from a tablist.
 function onTabKey(event: KeyboardEvent) {
   const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
   if (!step) return
   event.preventDefault()
   const next = (WEEKDAYS.indexOf(selectedDay.value) + step + WEEKDAYS.length) % WEEKDAYS.length
-  selectedDay.value = WEEKDAYS[next]!
+  selectDay(WEEKDAYS[next]!)
   tabs.value?.[next]?.focus()
 }
+
+onMounted(() => {
+  try {
+    const saved = localStorage.getItem(VIEW_KEY)
+    if (saved === 'day' || saved === 'week') view.value = saved
+  }
+  catch {
+    // Use the default.
+  }
+  const query = window.matchMedia('(min-width: 1024px)')
+  const onChange = () => (isLarge.value = query.matches)
+  onChange()
+  query.addEventListener('change', onChange)
+  onBeforeUnmount(() => query.removeEventListener('change', onChange))
+  nextTick(() => scrollTabIntoView(WEEKDAYS.indexOf(selectedDay.value), 'instant'))
+})
 </script>
