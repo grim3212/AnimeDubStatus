@@ -120,7 +120,7 @@ function handler(event) {
 
     // CloudFront distributions have no name, only an AWS-assigned id; the comment labels it.
     const distribution = new Distribution(this, 'Cdn', {
-      comment: config.domainName,
+      comment: `${config.domainName} (gg-site animedubstatus)`,
       domainNames: [config.domainName, ...config.redirectDomains],
       certificate,
       priceClass: PriceClass.PRICE_CLASS_100, // US/Canada/Europe edges only: the cheapest tier
