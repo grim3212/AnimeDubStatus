@@ -28,6 +28,7 @@ import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3'
 import { Topic } from 'aws-cdk-lib/aws-sns'
 import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions'
 import type { Construct } from 'constructs'
+import { securityHeadersFunction } from './security-headers'
 
 export interface SiteConfig {
   /** The canonical domain, e.g. animedubstatus.com. */
@@ -88,7 +89,7 @@ function handler(event) {
     })
 
     // The Content-Security-Policy itself is a <meta> tag in each page (see infra/lib/csp.ts).
-    const headers = new ResponseHeadersPolicy(this, 'Headers', {
+    const headers = securityHeadersFunction(this, 'SecurityHeaders', {
       responseHeadersPolicyName: name('headers'),
       securityHeadersBehavior: {
         frameOptions: { frameOption: HeadersFrameOption.DENY, override: true },
@@ -130,8 +131,8 @@ function handler(event) {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         // Honors each object's Cache-Control (set by deploy.mjs and the refresh-data Lambda).
         cachePolicy: CachePolicy.CACHING_OPTIMIZED,
-        responseHeadersPolicy: headers,
-        functionAssociations: [{ function: redirect, eventType: FunctionEventType.VIEWER_REQUEST }],
+        responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
+        functionAssociations: [{ function: headers, eventType: FunctionEventType.VIEWER_RESPONSE }, { function: redirect, eventType: FunctionEventType.VIEWER_REQUEST }],
       },
       // A private bucket answers 403 for missing files.
       errorResponses: [403, 404].map(httpStatus => ({

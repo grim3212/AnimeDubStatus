@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { App } from 'aws-cdk-lib'
+import { App, Tags } from 'aws-cdk-lib'
 import { SiteStack, type SiteConfig } from '../lib/site-stack'
 
 const config = JSON.parse(
@@ -13,3 +13,7 @@ new SiteStack(app, 'AnimeDubStatus', {
   env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'us-west-2' },
   config,
 })
+
+// Every resource carries its site's name. This site's deploy role may only change CloudFront
+// distributions and HTTP APIs tagged with it (see aws-lockdown).
+Tags.of(app).add('gg-site', 'animedubstatus')
