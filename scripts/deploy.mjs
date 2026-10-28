@@ -4,8 +4,8 @@
 //   node scripts/deploy.mjs web       upload the site only (no infrastructure changes)
 //   node scripts/deploy.mjs destroy   empty the site bucket, then cdk destroy
 //
-// Build the site first (`npm run build`). Locally this uses the "gulugulus" AWS CLI profile (or
-// AWS_PROFILE); in CI (CI=true) it uses whatever credentials the workflow configured.
+// Build the site first (`npm run build`). Locally this uses the "default" AWS CLI profile (the account root, signed in with `aws login`;
+// there are no deploy keys); in CI (CI=true) it uses whatever credentials the workflow configured.
 //
 // The site is uploaded with plain `aws s3 sync` instead of CDK's BucketDeployment, which would
 // add helper Lambdas and roles with generated names.
@@ -16,8 +16,8 @@ import { fileURLToPath } from 'node:url'
 
 const STACK = 'AnimeDubStatus'
 const REGION = 'us-west-2'
-// AWS_PROFILE overrides it, e.g. AWS_PROFILE=default.
-const PROFILE = process.env.AWS_PROFILE || 'gulugulus'
+// AWS_PROFILE picks a different named profile.
+const PROFILE = process.env.AWS_PROFILE || 'default'
 
 const ci = Boolean(process.env.CI)
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
