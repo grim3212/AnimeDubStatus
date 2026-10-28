@@ -71,7 +71,10 @@ function refreshData() {
 
 switch (process.argv[2]) {
   case 'full':
-    cdk('deploy', STACK)
+    // Re-read the bootstrap version from this site's own bootstrap instead of the value saved on the
+    // stack (which can point at another bootstrap this site's role isn't allowed to read). The stacks
+    // have no other parameters, so nothing else is reset.
+    cdk('deploy', STACK, '--no-previous-parameters')
     uploadSite()
     refreshData()
     break
