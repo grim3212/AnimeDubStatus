@@ -23,8 +23,7 @@ import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction, OutputFormat } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3'
-import { Topic } from 'aws-cdk-lib/aws-sns'
-import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions'
+import { Subscription, SubscriptionProtocol, Topic } from 'aws-cdk-lib/aws-sns'
 import type { Construct } from 'constructs'
 import { StringParameter } from 'aws-cdk-lib/aws-ssm'
 
@@ -90,9 +89,8 @@ function handler(event) {
     const headers = ResponseHeadersPolicy.fromResponseHeadersPolicyId(
       this,
       'Headers',
-      // Security headers are a response headers policy only root can change (aws-lockdown,
-      // headers/animedubstatus.json); no site's deploy role may edit headers policies. Read at deploy time.
-      StringParameter.valueForStringParameter(this, '/gg-headers/animedubstatus'),
+      // The security headers policy is managed outside this repo; its id is read from SSM at deploy time.
+      StringParameter.valueForStringParameter(this, '/animedubstatus/headers-policy-id'),
     )
 
     const originAccessControl = new S3OriginAccessControl(this, 'SiteOac', {
@@ -102,7 +100,7 @@ function handler(event) {
 
     // CloudFront distributions have no name, only an AWS-assigned id; the comment labels it.
     const distribution = new Distribution(this, 'Cdn', {
-      comment: `${config.domainName} (gg-site animedubstatus)`,
+      comment: config.domainName,
       domainNames: [config.domainName, ...config.redirectDomains],
       certificate,
       priceClass: PriceClass.PRICE_CLASS_100, // US/Canada/Europe edges only: the cheapest tier
@@ -153,7 +151,8 @@ function handler(event) {
 
     if (config.alertEmail) {
       const topic = new Topic(this, 'Alerts', { topicName: name('alerts') })
-      topic.addSubscription(new EmailSubscription(config.alertEmail))
+      // A fixed id: EmailSubscription would put the address in the resource's logical id.
+      new Subscription(this, 'AlertEmail', { topic, protocol: SubscriptionProtocol.EMAIL, endpoint: config.alertEmail })
       // One failed run is usually a source being briefly down; two in a row (~12h) needs a look.
       new Alarm(this, 'RefreshDataFailing', {
         alarmName: name('refresh-data-failing'),
