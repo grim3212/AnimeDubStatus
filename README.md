@@ -5,29 +5,16 @@ are airing each day this week. https://animedubstatus.com/
 
 ## How it works
 
-```
-                       every 6 hours
-EventBridge ──────────────▶ Lambda: animedubstatus-refresh-data (jobs/refresh-data.ts)
-                              │  MAL-Dubs dubInfo.json ─┐
-                              │  MAL forum airing list ─┼─▶ S3: data/dub-info.json
-                              │  AniList (details) ─────┘       data/airing.json
-                              ▼
-Browser ──▶ Cloudflare DNS ──▶ CloudFront ──▶ S3 (animedubstatus-com): the static Nuxt site + data/
-   │
-   └──▶ AniList GraphQL API (searches go straight from the browser)
-```
+A static site on a CDN. A scheduled job refreshes the dub data a few times a day from the sources
+in [Credits](#credits), and searches go straight from the browser to AniList's public API. There's
+no API server or database.
 
 - **Site** (`app/`): a static [Nuxt 4](https://nuxt.com) site (`nuxt generate`) styled with
   Tailwind CSS 4. It loads `/data/*.json` and looks up each search's MAL id in the dub list.
-- **Data job** (`jobs/`): one Node Lambda that rebuilds the two JSON files. If a source looks
-  broken, it throws instead of overwriting good data, and (with `alertEmail` set) two failures
-  in a row send an email.
-- **Infrastructure** (`infra/`): one AWS CDK stack in us-west-2 that creates the bucket, CloudFront,
-  the Lambda, its schedule and the alarm.
+- **Data job** (`jobs/`): rebuilds the JSON data files. If a source looks broken, it throws
+  instead of overwriting good data, and repeated failures send an alert.
+- **Infrastructure** (`infra/`): AWS CDK.
 - **Shared** (`shared/`): the JSON types and the AniList client, used by both the site and the job.
-
-There is no API server or database. Searches use [AniList](https://anilist.co)'s public API from
-the browser.
 
 ## Development
 
@@ -48,30 +35,14 @@ npm run dev            # http://localhost:3000
 
 ## Deploying
 
-Pushing to `main` deploys automatically (`.github/workflows/deploy.yml`). The workflow does a
-**full** deploy (CDK + site + data refresh) when `infra/`, `jobs/`, `shared/`, the deploy script,
-the workflow or dependencies changed, and otherwise a **web** deploy (upload the site only). You
-can also run it by hand from the Actions tab (web, full or refresh-data).
-
-GitHub signs in to AWS over OIDC with a role that only trusts the `main` branch of this repo, so
-no AWS keys are stored in GitHub. Pull requests run `.github/workflows/ci.yml`, which has no AWS
-access or secrets.
-
-Deploying from your own machine needs AWS access and an `infra/config.json` (see
-`infra/config.example.json`):
-
-```bash
-npm run deploy       # full: cdk deploy, upload the site, refresh the data
-npm run deploy:web   # just upload the site
-npm run diff         # preview infrastructure changes
-```
+Deployed to AWS with CDK. Pushing to `main` deploys automatically.
 
 ## Maintenance notes
 
 - **Dependencies**: Dependabot opens one grouped PR per month. CI checks it, and merging it deploys.
 - **If the airing list stops updating**: the forum post's layout probably changed. Check the
-  Lambda's logs, update `jobs/forum.ts` and its test (`jobs/forum.test.ts`), then push.
-- **Security headers**: CloudFront sends HSTS, X-Frame-Options and so on. The
+  data job's logs, update `jobs/forum.ts` and its test (`jobs/forum.test.ts`), then push.
+- **Security headers**: the CDN sends HSTS, X-Frame-Options and so on. The
   Content-Security-Policy is a `<meta>` tag written into each page at build time
   (`infra/lib/csp.ts`) so it can allow Nuxt's inline scripts by hash. Add any new external
   host there.
