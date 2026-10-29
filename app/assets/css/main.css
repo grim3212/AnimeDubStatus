@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  color-scheme: dark;
+  background-color: var(--color-gray-900);
+  -webkit-text-size-adjust: 100%;
+  /* Reserve the scrollbar's space so locking scroll for the detail view doesn't shift the page. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-200);
+  overflow-x: hidden;
+}
+
+/* Tailwind 4 leaves buttons with the default arrow cursor; everything clickable here gets the hand. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+/* While the detail view is open, the page behind it doesn't scroll. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* Native <dialog> backdrop (the detail view). */
+dialog::backdrop {
+  background: rgb(2 6 23 / 0.8);
+  backdrop-filter: blur(4px);
+}
+
+/* Hide the horizontal scrollbar on the weekday tabs while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,51 @@
+<template>
+  <footer class="mt-16 flex flex-col items-center bg-gray-800 px-4 py-6 text-center text-gray-300">
+    <div class="flex max-w-3xl flex-col items-center gap-y-2">
+      <p class="text-sm">
+        &copy; 2023–{{ year }} Dakota Pierone (Grim3212). Built using
+        <a :class="link" class="font-bold" href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue</a>
+        with
+        <a :class="link" class="font-bold" href="https://nuxt.com/" target="_blank" rel="noopener noreferrer">Nuxt</a>.
+      </p>
+      <p class="text-xs">
+        Licensed under <a :class="link" href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>.
+        Source code can be found on
+        <a :class="link" class="font-bold" href="https://github.com/grim3212/AnimeDubStatus" target="_blank" rel="noopener noreferrer">GitHub</a>.
+      </p>
+      <p class="text-xs">
+        Uses <a :class="link" href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+        licensed data from
+        <a :class="link" class="font-bold" href="https://github.com/MAL-Dubs/MAL-Dubs" target="_blank" rel="noopener noreferrer">MAL-Dubs</a>.
+        <b>dubInfo.json</b> can be found
+        <a :class="link" class="font-bold" href="https://github.com/MAL-Dubs/MAL-Dubs/blob/main/data/dubInfo.json" target="_blank" rel="noopener noreferrer">here</a>.
+      </p>
+      <p class="text-xs">
+        Uses the list of
+        <a :class="link" class="font-bold" href="https://myanimelist.net/forum/?topicid=1692966" target="_blank" rel="noopener noreferrer">Currently Airing Anime</a>
+        maintained by
+        <a :class="link" class="font-bold" href="https://myanimelist.net/profile/Kenny_Stryker" target="_blank" rel="noopener noreferrer">Kenny_Stryker</a>
+        on MyAnimeList.
+      </p>
+      <p class="text-xs">
+        Search, cover art and Japanese air times from
+        <a :class="link" class="font-bold" href="https://anilist.co/" target="_blank" rel="noopener noreferrer">AniList</a>.
+      </p>
+    </div>
+    <div class="mt-2 flex justify-center">
+      <a
+        class="flex items-center px-3 py-2 text-xs font-bold text-gray-300 uppercase hover:text-gray-500"
+        href="https://github.com/grim3212"
+        target="_blank"
+        rel="noopener noreferrer"
+      ><svg class="size-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+        <path
+          d="M10 0a10 10 0 0 0-3.16 19.49c.5.1.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69a3.6 3.6 0 0 1 .1-2.64s.84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.37.2 2.4.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .26.18.58.69.48A10 10 0 0 0 10 0"
+        /></svg><span class="ml-2">GitHub</span></a>
+    </div>
+  </footer>
+</template>
+
+<script setup lang="ts">
+const year = new Date().getFullYear()
+const link = 'text-gray-400 underline hover:text-gray-100 visited:text-purple-400'
+</script>
