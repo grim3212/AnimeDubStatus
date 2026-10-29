@@ -11,7 +11,7 @@
     "typecheck": "nuxt typecheck && tsc --noEmit -p infra && tsc --noEmit -p jobs",
     "test": "vitest run",
     "refresh-data": "tsx jobs/run-local.ts",
-    "diff": "cdk diff --profile gulugulus",
+    "diff": "cdk diff",
     "deploy": "npm run build && node scripts/deploy.mjs full",
     "deploy:web": "npm run build && node scripts/deploy.mjs web",
     "destroy": "node scripts/deploy.mjs destroy"

@@ -14,6 +14,5 @@ new SiteStack(app, 'AnimeDubStatus', {
   config,
 })
 
-// Every resource carries its site's name. This site's deploy role may only change CloudFront
-// distributions and HTTP APIs tagged with it (see aws-lockdown).
-Tags.of(app).add('gg-site', 'animedubstatus')
+// Every resource is tagged with the site's name.
+Tags.of(app).add('site', 'animedubstatus')

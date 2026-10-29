@@ -28,5 +28,3 @@ Thumbs.db
 .idea/
 .fleet/
 
-# Local-only AWS account setup (not part of the public repo)
-scripts/setup-aws-access.sh
