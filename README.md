@@ -18,7 +18,7 @@ no API server or database.
 
 ## Development
 
-Needs Node 24.
+Needs Node 26.
 
 ```bash
 npm install
